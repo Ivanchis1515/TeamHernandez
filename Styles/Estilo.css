@@ -1,0 +1,126 @@
+body{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;   
+}
+
+.bebas{
+    font-family: 'Bebas Neue', cursive;
+}
+
+.body{
+    padding: 50px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background-image: url('../Img/fondoSecunadria.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+.Fondo{
+    background-image: url('../Img/fondo.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+.title{
+    font-size: 4em;
+    margin-top: 0;
+}
+
+.main-nav a{
+    width: 30%;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.main-header{
+    background-color: rgb(233, 227, 227);
+    padding-left: 15px;padding-right: 15px;padding-top: 10px;padding-bottom: 10px;
+    border-radius:4px ;
+    text-decoration: none;
+}
+
+.nav-link {
+    color: black;
+    margin-right: 4px;
+   
+}
+
+.tex-center{
+    text-align: center;
+    height: 230px; 
+}
+
+.tex{
+    color: rgb(0, 0, 0);
+}
+
+.main-container{
+    min-height: 100vh;
+}
+
+.sombra{
+    border-radius: 4px;
+    background-color: rgb(27, 26, 26);
+    box-shadow: 0 1px 3px  rgba(0,0,0,0,12), 0 1px 3px rgba(0,0,0,0,24);
+}
+
+.threeD{
+    text-shadow: 1px 3px 0px #cc0101, 1px 13px 5px rgb(171, 168, 168);
+}
+
+html{
+    font-size: 16px;
+}
+
+.social-bar{
+    position:absolute;
+    right: 0;
+    top: 35%;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 100;
+}
+
+.icon {
+    color: white;
+    text-decoration: none;
+    padding: 0.7rem; 
+    display: flex;
+    transition: all .5s;
+}
+
+.icon-facebook2{
+    background: #2E406E;
+   
+}
+
+.icon-instagram{
+    background: #ff0080;
+}
+
+.icon-tiktok{
+    background: #000;
+}
+
+.icon:first-child{
+    border-radius: 1rem 0 0 0;
+}
+
+.icon:last-child{
+    border-radius: 0 0 0 1rem;
+}
+
+.icon:hover{
+    padding-right: 3rem;
+    border-radius: 1rem 0 0 1rem;
+    box-shadow: 0 0 .5rem rgba(0, 0, 0, 0.42);
+}
+
+.dieta{
+    position: static;
+    display: flex;
+}

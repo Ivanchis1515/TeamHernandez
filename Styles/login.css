@@ -1,0 +1,215 @@
+/* efectos por defecto */
+body {
+    font-family: 'Overpass', sans-serif;
+    font-weight: normal;
+    font-size: 100%;
+    color: #a00000;
+    
+    margin: 0;
+    background-color: rgb(109, 13, 13);
+}
+
+/* efectos para el contenedor de pantalla completa */
+#contenedor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    margin: 0;
+    padding: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+    
+    background-image: url('../Img/fondoSecunadria.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+#contenedorcentrado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:row;
+    
+    min-width: 380px;
+    max-width: 900px;
+    width: 90%;
+    
+    backface-visibility: hidden;
+    
+  
+    
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+#login {
+    width: 100%;
+    max-width: 320px;
+    min-width: 320px;
+    padding: 30px 30px 50px 30px;
+   
+    background-color:#4d4e50;
+    
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+    
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    
+    box-sizing: border-box;
+    
+    opacity: 1;
+    filter: alpha(opacity=1);
+}
+
+#login label {
+    display: block;
+    font-family: 'Overpass', sans-serif;
+    font-size: 120%;
+    color:#000000;
+    
+    margin-top: 15px;
+}
+
+#login input {
+    font-family: 'Overpass', sans-serif;
+    font-size: 110%;
+    color: #000000;
+    
+    display: block;
+    width: 100%;
+    height: 40px;
+    
+    margin-bottom: 10px;
+    padding: 5px 5px 5px 10px;
+    
+    box-sizing: border-box;
+    
+    border: none;
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+#login input::placeholder {
+    font-family: 'Overpass', sans-serif;
+    color: #c28c8c;
+}
+
+#login button {
+    font-family: 'Overpass', sans-serif;
+    font-size: 110%;
+    color:#000000;
+    width: 100%;
+    height: 40px;
+    border: none;
+    
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    
+    background-color: #555557;
+    
+    margin-top: 10px;
+}
+
+#login button:hover {
+    background-color: #eaeff1;
+    color:#030303;
+}
+
+#derecho {
+    
+    text-align: center;
+    width: 100%;
+    
+    opacity: 0.70;
+    filter: alpha(opacity=70);
+    
+    padding:20px 20px 20px 50px;
+    box-sizing: border-box;
+}
+
+.titulo {
+    font-family: 'Staatliches', cursive;
+    font-size:200%;
+    color:#000;
+}
+
+.logo-empresa img {
+    width: 60%;
+}
+
+hr {
+    border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+    
+}
+.pie-form {
+    font-size: 100%;
+    text-align: center;    
+    margin-top: 15px;
+}
+
+.pie-form a {
+    display: block;
+    text-decoration: none;
+    color: #0a0a0a;
+    margin-bottom: 3px;
+}
+
+.pie-form a:hover {
+    color: #f0ebeb;
+}
+
+@media all and (max-width: 775px)
+{
+    #contenedorcentrado {
+        flex-direction:column-reverse;
+
+        min-width: 380px;
+        max-width: 900px;
+        width: 90%;
+
+        backface-visibility: hidden;
+    
+
+   
+        border-radius: 10px 10px 10px 10px;
+        -moz-border-radius: 10px 10px 10px 10px;
+        -webkit-border-radius: 10px 10px 10px 10px;
+
+        -webkit-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+        -moz-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+        box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.15);
+
+        padding: 30px;
+        box-sizing: border-box;
+    }
+    
+    #login {
+        margin: 0 auto;
+    }
+    
+    #derecho {
+        padding:20px 20px 20px 20px;
+    }
+    
+    #login label {
+        text-align: left;
+    }
+}
+
