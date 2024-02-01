@@ -297,90 +297,78 @@ $(document).ready(function(){
             url: "./Entrenamientos/Ejercicios/ejercicio_obtener.php",
             data: { idPlan: idPlanSeleccionado },
             method: "POST",
+            dataType: "json",
             success: function (data) {
-                try {
-                    //intentar parsear el JSON
-                    datos = JSON.parse(data);
-                    //verificar si el JSON está vacío
-                    if (datos.length > 0) {
-                        let ulContent = '<ul class="list-group">';
-                        datos.forEach(ejercicio => {
-                            ulContent +=
-                                '<li class="list-group-item ejercicio-item" data-id="' + ejercicio.id + '">' +
-                                    '<div class="row">' +
-                                        '<div class="col-6 d-flex align-items-center">' +
-                                            '<span class="text-left">' + ejercicio.nombre + '</span>' +
-                                        '</div>' +
-                                        '<div class="col-6">' +
-                                            '<div id="lottieContainer_' + ejercicio.id + '" style="width: 100%; height: 100%;"></div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                    '<div class="detalles" style="display:none;">' +
-                                        '<p class="text-left">Descripción: ' + ejercicio.descripcion + '</p>' +
-                                        // '<p>Instrucciones: ' + ejercicio.instrucciones + '</p>' +
-                                        '<p class="text-left">Series: ' + ejercicio.series + '</p>' +
-                                        '<p class="text-left">Repeticiones: ' + ejercicio.repeticiones + '</p>' +
-                                        '<button class="btn btn-danger eliminar-ejercicio" data-id="' + ejercicio.id + '">Eliminar</button>' +
-                                    '</div>' +
-                                '</li>';
-                        });
-                        ulContent += '</ul>';
-                        $('#cuerpo_formEntrenamiento').html(ulContent);
-                        datos.forEach(ejercicio => {
-                            const lottieContent = document.getElementById('lottieContainer_' + ejercicio.id);
-                            const animationPath = ejercicio.video;
-                            //cargar la animación Lottie
-                            const lottieInstance = lottie.loadAnimation({
-                                container: lottieContent,
-                                renderer: 'svg',
-                                loop: true,
-                                autoplay: true,
-                                path: animationPath
-                            });
-                        });
-                        //desplegar el <li>'
-                        $('.ejercicio-item').on('click', function () {
-                            $(this).find('.detalles').slideToggle();
-                        });
-        
-                        //evento de clic a los botones de eliminar
-                        $('.eliminar-ejercicio').on('click', function (event) {
-                            //ddeten la navegación predeterminada
-                            event.preventDefault();
-                            const ejercicioId = $(this).data('id');
-                            Swal.fire({
-                                title: '¿Estás seguro?',
-                                text: 'Esta acción no se puede deshacer.',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Sí, eliminarlo'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    EliminarEjercicio(ejercicioId);
-                                }
-                            });
-                        });
-                    } else {
-                        //si no hay casos donde registros haya registros
-                        $('#cuerpo_formEntrenamiento').html('<p>No hay ejercicios disponibles.</p>');
-                    }
-                } catch (error) {
-                    //manejar el error al parsear el JSON
-                    console.error('Error al parsear JSON:', error);
-                    $('#cuerpo_formEntrenamiento').html('<p>Ocurrió un error al obtener los ejercicios.</p>');
+                //verificar si hay datos
+                if (!data || data.length === 0) {
+                    $('#cuerpo_formEntrenamiento').html('<p>No hay ejercicios disponibles.</p>');
+                    return;
                 }
+                let ulContent = '<ul class="list-group">';
+                data.forEach(ejercicio => {
+                    ulContent +=
+                        '<li class="list-group-item ejercicio-item" data-id="' + ejercicio.id + '">' +
+                            '<div class="row">' +
+                                '<div class="col-6 d-flex align-items-center">' +
+                                    '<span class="text-left">' + ejercicio.nombre + '</span>' +
+                                '</div>' +
+                                '<div class="col-6">' +
+                                    '<div id="lottieContainer_' + ejercicio.id + '" style="width: 100%; height: 100%;"></div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="detalles" style="display:none;">' +
+                                '<p class="text-left">Descripción: ' + ejercicio.descripcion + '</p>' +
+                                // '<p>Instrucciones: ' + ejercicio.instrucciones + '</p>' +
+                                '<p class="text-left">Series: ' + ejercicio.series + '</p>' +
+                                '<p class="text-left">Repeticiones: ' + ejercicio.repeticiones + '</p>' +
+                                '<button class="btn btn-danger eliminar-ejercicio" data-id="' + ejercicio.id + '">Eliminar</button>' +
+                            '</div>' +
+                        '</li>';
+                });
+                ulContent += '</ul>';
+                $('#cuerpo_formEntrenamiento').html(ulContent);
+                data.forEach(ejercicio => {
+                    const lottieContent = document.getElementById('lottieContainer_' + ejercicio.id);
+                    const animationPath = ejercicio.video;
+
+                    //cargar la animación Lottie
+                    const lottieInstance = lottie.loadAnimation({
+                        container: lottieContent,
+                        renderer: 'svg',
+                        loop: true,
+                        autoplay: true,
+                        path: animationPath
+                    });
+                });
+
+                //Desplegar la lista de cada ejercicio
+                $('.ejercicio-item').on('click', function () {
+                    $(this).find('.detalles').slideToggle();
+                });
+                //evento de clic a los botones de eliminar
+                $('.eliminar-ejercicio').on('click', function (event) {
+                    //deten la navegación predeterminada
+                    event.preventDefault();
+                    const ejercicioId = $(this).data('id');
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: 'Esta acción no se puede deshacer.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, eliminarlo'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            EliminarEjercicio(ejercicioId);
+                        }
+                    });
+                });
             },
             error: function () {
                 // Manejar errores de la solicitud AJAX
-                Swal.fire({
-                    icon: 'error',
-                    title: '¡Error!',
-                    text: 'Hubo un problema al extraer los ejercicios',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
+                console.error('Error en la solicitud AJAX.');
+                $('#cuerpo_formEntrenamiento').html('<p>Ocurrió un error al obtener los ejercicios.</p>');
             }
         });
     });
