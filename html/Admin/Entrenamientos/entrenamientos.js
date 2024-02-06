@@ -30,11 +30,14 @@ $(document).ready(function(){
             '<div class="mb-3">' +
                 '<label class="form-label">Foto:</label>' +
                 '<input class="form-control" type="file" name="foto">' +
+            '</div>' +
+            '<div class="modal-footer">' +
+                '<button id="boton_insertarEntrenamiento" type="button" class="btn btn-success">Agregar plan de entrenamiento</button>' +
+                '<button id="boton_cancelarEntrenamiento" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>' +
             '</div>';
-
         $('#cuerpo_formEntrenamiento').html(formContent);
 
-        $(document).on('click', '#boton_insertarEntrenamiento', function(event){
+        $('#boton_insertarEntrenamiento').off('click').on('click', function(event){
             event.preventDefault(); //detiene la accion predeterminada
             var formData = new FormData($('#insertarEntrenamiento')[0]);
             $.ajax({
@@ -161,9 +164,14 @@ $(document).ready(function(){
                     `<select class="form-select" name="repeticiones" required>${generarValores(1, 20)}</select>` +
                 '</div>' +
             '</div>' +
-            '<div id="contenedorLottie"></div>';
+            '<div id="contenedorLottie"></div>' +
+            '<div class="modal-footer">' +
+                '<button id="boton_insertarEjercicio" type="button" class="btn btn-success">Agregar ejercicio al plan</button>' +
+                '<button id="boton_cancelar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>' +
+            '</div>';
         $('#cuerpo_formEntrenamiento').html(formContent);
-        // Información de las animaciones
+        
+        //información de las animaciones
         const animaciones = {
             'animacion1': {
                 nombre: 'Zancadas con cambio',
@@ -227,9 +235,8 @@ $(document).ready(function(){
                 });
             }
         });
-
         //insertar ejercicio
-        $('#boton_insertarEntrenamiento').off('click').on('click', function(){
+        $('#boton_insertarEjercicio').off('click').on('click', function(){
             //obtener la animación seleccionada
             const selectedOption = $('#lottieSelect').find(':selected');
             const animationPath = selectedOption.data('animation-path');
@@ -276,7 +283,7 @@ $(document).ready(function(){
                     });
                 }
             });
-        }).attr('id', 'boton_insertarEjercicio');
+        });
     });
 
     //MOSTRAR EJERCICIOS 
@@ -291,8 +298,6 @@ $(document).ready(function(){
             keyboard: false
         });
         $('#modal_tituloEntrenamiento').html('<strong>Ejercicios</strong>');
-        //ocultar el boton de guardar
-        $('#boton_insertarEntrenamiento').hide();
         $.ajax({
             url: "./Entrenamientos/Ejercicios/ejercicio_obtener.php",
             data: { idPlan: idPlanSeleccionado },
@@ -325,7 +330,10 @@ $(document).ready(function(){
                             '</div>' +
                         '</li>';
                 });
-                ulContent += '</ul>';
+                ulContent += '</ul>' +
+                    '<div class="modal-footer">' +
+                        '<button id="boton_cancelar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>' +
+                    '</div>';
                 $('#cuerpo_formEntrenamiento').html(ulContent);
                 data.forEach(ejercicio => {
                     const lottieContent = document.getElementById('lottieContainer_' + ejercicio.id);
