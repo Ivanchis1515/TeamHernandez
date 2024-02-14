@@ -184,7 +184,11 @@ $(document).ready(function(){
             'animacion3': {
                 nombre: 'Planchas laterales',
                 path: 'http://localhost/TeamHernandez/Img/Animations/Animation_1706502928162.json'
-            }
+            },
+            'animacion4': {
+                nombre: 'Press completo',
+                path: 'http://localhost/TeamHernandez/Img/Animations/Animation_1707238889636.json'
+            },
         };
 
         // Obtener el contenedor de Lottie
