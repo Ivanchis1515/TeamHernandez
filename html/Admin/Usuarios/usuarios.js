@@ -28,7 +28,12 @@ $(document).ready(function() {
                 '</div>' +
                 '<div class="col mb-3">' +
                     '<label class="form-label">Tipo de rol:</label>' +
-                    '<input type="text" class="form-control" id="tipo" name="tipo" placeholder="ejem: Admin/Coach/Cliente" required="required">' +
+                    '<select class="form-select" id="tipo" name="tipo" required="required">' +
+                        '<option value="Administrador">Administrador</option>' +
+                        '<option value="Coach">Coach</option>' +
+                        '<option value="Cliente">Cliente</option>' +
+                        '<option value="Atleta">Atleta</option>' +
+                    '</select>' +
                 '</div>' +
             '</div>' +
             '<div class="mb-3">' +
@@ -41,6 +46,7 @@ $(document).ready(function() {
     $(document).on('click', '#boton_insertar', function(event){
         event.preventDefault(); //detiene la accion predeterminada
         var formdata = $('#insertar').serialize();
+        console.log(formdata);
         $.ajax({
             type:"POST",
             url:"./Usuarios/usuario_insertar.php",
@@ -130,7 +136,12 @@ $(document).ready(function() {
                         '</div>' +
                         '<div class="col mb-3">' +
                             '<label class="form-label">Tipo de rol:</label>' +
-                            '<input type="text" class="form-control" name="tipo" placeholder="ejem: Admin/Coach/Cliente" value="'+ datos.tipo +'" required>' +
+                            '<select class="form-select" id="tipo" name="tipo" required="required">' +
+                                '<option value="Administrador" ' + (datos.tipo === 'Administrador' ? 'selected' : '') + '>Administrador</option>' +
+                                '<option value="Coach" ' + (datos.tipo === 'Coach' ? 'selected' : '') + '>Coach</option>' +
+                                '<option value="Cliente" ' + (datos.tipo === 'Cliente' ? 'selected' : '') + '>Cliente</option>' +
+                                '<option value="Atleta" ' + (datos.tipo === 'Atleta' ? 'selected' : '') + '>Atleta</option>' +
+                            '</select>' +
                         '</div>' +
                     '</div>' +
                     '<div class="mb-3">' +

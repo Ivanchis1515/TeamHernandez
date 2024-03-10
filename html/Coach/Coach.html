@@ -7,20 +7,25 @@
     <title>Coach</title>
     <!-- JQuery para el uso de ajax -->
     <script src="../../lib/jquery-3.6.0.min.js"></script>
+    <!-- libreria cryptojs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <!-- Iconos de fontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <!-- bootstrap4 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <!-- Estilos -->
     <link rel="icon" type="image/x-icon" href="../../Img/incono.ico">
     <link rel="stylesheet" href="../../Styles/Estilo.css">
     <link rel="stylesheet" href="../../Styles/adm.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 </head>
 <body>
-
     <div class="container-fluid">
         <div class="row justify-content-center align-content-center">
             <div class="col-8 barra">
                 <head>
-                    <img src="../../Img/logoADM.jpg" height="100" alt="logo">
+                    <a href="Coach.html">
+                        <img src="../../Img/logoADM.jpg" height="100" alt="logo">
+                    </a>
                 </head>
             </div>
             <div class="col-4 text-right barra">
@@ -36,12 +41,11 @@
             </div>
         </div>
     </div>
-
     <div class="container-fluid">
         <div class="row">
             <div class="barra-lateral col-12 col-sm-auto">
                 <nav class="menu d-flex d-sm-block justify-content-center flex-wrap">
-                    <a href="añadirplan_coach.php" id="enlace"><i class="fas fa-home"></i><span>Plan nutricional</span></a>
+                    <a href="./Plan/plan_usuarios_lista.php" id="enlace" data-page="plan_usuarios_lista.php"><i class="fa-solid fa-user-group"></i><span>Plan nutricional</span></a>
                     <a href="#"><i class="fas fa-home"></i><span>Rutina</span></a>
                     <a href="#"><i class="fas fa-home"></i><span>Avancez</span></a>
                 </nav>
@@ -51,41 +55,18 @@
                     <div class="columna col-lg-12" id="contenido">
                         CONTENIDO
                     </div>
+                    <div id="contenido" class="col-lg-12">
+                    </div>
                 </div>
             </main>
         </div>
     </div>
-
-    <script language="javascript" type="text/javascript">
-        $(document).ready(function(){
-            // Manejador de eventos para cargar una página al hacer clic en un enlace
-            $('#enlace').click(function(event) {
-                event.preventDefault(); // Evita la navegación predeterminada
-                var nuevaPaginaURL = $(this).attr('href'); // Obtiene la URL de la nueva página
-                console.log('URL de la nueva página:', nuevaPaginaURL); // Agregar esto para depuración
-                cargarPagina(nuevaPaginaURL); // Carga la nueva página
-            });
-            // Función para cargar una nueva página y reemplazar el contenido actual
-            function cargarPagina(url) {
-                // Agrega la clase de transición antes de cargar la página
-                $('#contenido').addClass('transicion-contenido');
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function(data) {
-                        setTimeout(function() {
-                            $('#contenido').html(data); // Reemplaza el contenido actual con la nueva página
-                            // Quita la clase de transición después de cargar la página
-                            $('#contenido').removeClass('transicion-contenido');
-                        }, 300); // Ajusta el tiempo según la duración de la transición CSS
-                    },
-                    error: function() {
-                        alert('Error al cargar la página');
-                    }
-                });
-            }
-        });
-    </script>
+    <!-- Scripts para pagina principal -->
+    <script src="./Coach.js"></script>
+    <!-- Script lista_usuarios -->
+    <script src="./Usuarios/usuarios.js"></script>
+    <!--SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/646c794df3.js"></script>
