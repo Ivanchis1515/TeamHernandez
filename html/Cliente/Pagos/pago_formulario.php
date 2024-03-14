@@ -102,7 +102,8 @@
             authorization: clientToken
         }, function(err, client) {
             if (err) {
-                console.error('Error al inicializar braintree.client:', err);
+                // console.error('Error al inicializar braintree.client:', err);
+                swal("Error", "Hubo un error al inicializar Braintree. Por favor, inténtalo de nuevo más tarde.", "error");
                 return;
             }
             console.log('Braintree client initialized successfully:', client);
@@ -164,6 +165,7 @@
             }, function(err, hostedFields) {
                 if (err) {
                     console.error(err);
+                    swal("Error", "Hubo un error al crear los campos de tarjeta. Por favor, inténtalo de nuevo más tarde.", "error");
                     return;
                 }
     
@@ -174,11 +176,12 @@
                     hostedFields.tokenize(function(err, payload) {
                         if (err) {
                             console.error(err);
+                            swal("Error", "Hubo un error al tokenizar la tarjeta. Por favor, revisa los datos e inténtalo de nuevo.", "error");
                             return;
                         }
     
                         // Si esta fuera una integración real, aquí es donde enviarías el nonce a tu servidor.
-                        console.log('Got a nonce: ' + payload.nonce);
+                        // console.log('Got a nonce: ' + payload.nonce);
     
                         // Agrega el valor del nonce al formulario
                         $('#payment_method_nonce').val(payload.nonce);
@@ -186,8 +189,8 @@
                         const pago = payload.nonce; // Obtén el nonce generado por Braintree
     
                         // Envía el formulario con AJAX
-                        const data= { payment_method_nonce: nonce }; // Crea un objeto con el nonce
-                        $.post('pago_validacion.php', data)
+                        const data= { payment_method_nonce: pago }; // Crea un objeto con el nonce
+                        $.post('./Pagos/pago_validacion.php', data)
                             .done(function(response) {
                                 // Procesamiento exitoso, haz lo que necesites aquí
                                 console.log(response);
@@ -195,6 +198,7 @@
                             .fail(function(xhr, status, error) {
                                 // Error en el procesamiento
                                 console.error('Error al procesar el pago. Código de estado:', xhr.status);
+                                swal("Error", "Hubo un error al procesar el pago. Por favor, inténtalo de nuevo más tarde.", "error");
                             });
                     });
                 });
