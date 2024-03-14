@@ -1,6 +1,6 @@
 {
     "require": {
         "firebase/php-jwt": "^6.9",
-        "braintree/braintree_php" : "{{serverSdk.php.release.configVersion}}"
+        "braintree/braintree_php": "^6.17"
     }
 }
