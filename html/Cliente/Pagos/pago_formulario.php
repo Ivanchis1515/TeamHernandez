@@ -4,14 +4,14 @@
 <div class="container mb-3">
     <div class="sub-body">
         <header class="header">
-            <h1 class="price"><span class="price__dollar">$</span>15.00<span class="price__time">/ mo</span></h1>
-            <p class="desc">Chicharrón Subscription</p>
+            <h1 class="price"><span class="price__dollar">$</span>300.00<span class="price__time">/ mo</span></h1>
+            <p class="desc">Subscripción mensual</p>
         </header>
     
         <div class="pay-select">
             <div class="pay-select__item pay-select--card is-active">
                 <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/346994/Card%20Icon.svg" alt="" />
-                <p>Debit/Credit Card</p>
+                <p>Tarjeta Débito/Crédit</p>
             </div>
     
             <div class="separator"></div>
@@ -24,24 +24,24 @@
     
         <div class="select-body">
             <div class="select-body__content select-body--card is-active">
-                <form action="/" method="post" id="cardForm">
-                    <label class="form__label" for="card-number">Card Number</label>
+                <form method="post" id="cardForm">
+                    <label class="form__label" for="card-number">Numero de tarjeta:</label>
                     <div class="card-input" id="card-number"></div>
     
-                    <label class="form__label" for="expiration-month">Expiration Date</label>
+                    <label class="form__label" for="expiration-month">Fecha de expiración</label>
                     <div class="date__container">
-                    <div class="card-input" id="expiration-month"></div>
-    
-                    <div class="card-input" id="expiration-year"></div>
+                        <div class="card-input" id="expiration-month"></div>
+        
+                        <div class="card-input" id="expiration-year"></div>
                     </div>
     
-                    <label class="form__label" for="cvv">CVV</label>
+                    <label class="form__label" for="cvv">CVV:</label>
                     <div class="card-input" id="cvv"></div>
     
-                    <label class="form__label" for="cvv">Billing Zip Code</label>
+                    <label class="form__label" for="cvv">Código Postal:</label>
                     <div class="card-input" id="postal-code"></div>
                     
-                    <input type="submit" value="Subscribe" id="submit" />
+                    <input type="submit" value="Pagar" id="submit" />
                 </form>
             </div>
             
