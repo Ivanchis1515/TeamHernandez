@@ -20,6 +20,16 @@ $(document).ready(function() {
                 $('#contenido').empty();
                 cargarPagina(nuevaPaginaURL);
                 break;
+            case "periodos_lista.php":
+                // Remueve el contenido actual
+                $('#contenido').empty();
+                cargarPagina(nuevaPaginaURL);
+                break;
+            case "servicios_lista.php":
+                // Remueve el contenido actual
+                $('#contenido').empty();
+                cargarPagina(nuevaPaginaURL);
+                break;
         }
     });
     
