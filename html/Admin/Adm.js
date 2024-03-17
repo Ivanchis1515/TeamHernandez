@@ -1,36 +1,41 @@
 $(document).ready(function() {
+    // Verificar sesión al cargar la página
+    // verificarSesion();
+
     // Manejador de eventos para cargar una página al hacer clic en un enlace
     $('.enlace').click(function(event) {
         event.preventDefault(); // Evita la navegación predeterminada
         var nuevaPaginaURL = $(this).attr('href'); // Obtiene la URL de la nueva página
         console.log('URL de la nueva página:', nuevaPaginaURL); // Agregar esto para depuración
-        var dataPage = $(this).data('page');
-        switch (dataPage){
-            case "usuarios_lista.php":
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL); // Carga la nueva página
-                break;
-            case "dietas_lista.php":
-                // Remueve el contenido actual
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL);
-                break;
-            case "entrenamientos_lista.php":
-                // Remueve el contenido actual
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL);
-                break;
-            case "periodos_lista.php":
-                // Remueve el contenido actual
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL);
-                break;
-            case "servicios_lista.php":
-                // Remueve el contenido actual
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL);
-                break;
-        }
+        $('#contenido').empty();
+        cargarPagina(nuevaPaginaURL); // Carga la nueva págin
+        // var dataPage = $(this).data('page');
+        // switch (dataPage){
+        //     case "usuarios_lista.php":
+        //         $('#contenido').empty();
+        //         cargarPagina(nuevaPaginaURL); // Carga la nueva página
+        //         break;
+        //     case "dietas_lista.php":
+        //         // Remueve el contenido actual
+        //         $('#contenido').empty();
+        //         cargarPagina(nuevaPaginaURL);
+        //         break;
+        //     case "entrenamientos_lista.php":
+        //         // Remueve el contenido actual
+        //         $('#contenido').empty();
+        //         cargarPagina(nuevaPaginaURL);
+        //         break;
+        //     case "periodos_lista.php":
+        //         // Remueve el contenido actual
+        //         $('#contenido').empty();
+        //         cargarPagina(nuevaPaginaURL);
+        //         break;
+        //     case "servicios_lista.php":
+        //         // Remueve el contenido actual
+        //         $('#contenido').empty();
+        //         cargarPagina(nuevaPaginaURL);
+        //         break;
+        // }
     });
     
     // Función para cargar una nueva página y reemplazar el contenido actual
@@ -52,22 +57,42 @@ $(document).ready(function() {
             }
         });
     }
-    // Manejador de eventos para cerrar sesión
-    $('#cerrar-sesion').click(function(event) {
-        event.preventDefault(); // Evita la navegación predeterminada
-        // Realiza una solicitud AJAX para cerrar sesión
+
+    //manejador de eventos para cerrar sesión
+    // $('#cerrar-sesion').click(function(event) {
+    //     event.preventDefault(); //evita la navegación predeterminada
+    //     //realiza una solicitud AJAX para cerrar sesión
+    //     $.ajax({
+    //         url: '../../config/cerrar_sesion.php',
+    //         method: 'GET',
+    //         success: function(data) {
+    //             //elimina el token JWT del almacenamiento local
+    //             localStorage.removeItem('jwt');
+    //             //redirige al formulario de inicio de sesión
+    //             window.location.href = '../Login/Sesion.html';
+    //         },
+    //         error: function() {
+    //             alert('Error al cerrar sesión');
+    //         }
+    //     });
+    // });
+
+    //funcion para verificar la sesión del usuario
+    function verificarSesion() {
         $.ajax({
-            url: '../../config/cerrar_sesion.php',
+            url: '../../config/verificar_sesion.php', //ruta a tu script PHP para verificar la sesión
             method: 'GET',
+            dataType: 'json',
             success: function(data) {
-                // Maneja la respuesta del servidor
-                alert(data.message); // Muestra un mensaje
-                // Redirige al formulario de inicio de sesión
-                window.location.href = '../Login/Sesion.html';
+                //maneja la respuesta del servidor
+                if (data && data.error) {
+                    //si hay un error en la sesión, redirige al formulario de inicio de sesión
+                    window.location.href = '../Login/Sesion.html';
+                }
             },
             error: function() {
-                alert('Error al cerrar sesión');
+                alert('Error al verificar la sesión');
             }
         });
-    });
+    }
 });
