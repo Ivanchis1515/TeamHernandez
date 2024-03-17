@@ -1,8 +1,3 @@
-<style>
-    .boton_mostrar_ejercicios {
-        display: none;
-    }
-</style>
 <!-- Modal -->
 <div class="modal fade" id="miModalEntrenamiento" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

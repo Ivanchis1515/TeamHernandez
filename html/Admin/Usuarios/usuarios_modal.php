@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="miModalUsuarios" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,11 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="insertar" method="post" class="cuerpo_form">
-                    <div class="modal-footer">
-                        <button id="boton_insertar" type="button" class="btn btn-success">Guardar</button>
-                        <button id="boton_cancelar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    </div>
+                <form id="insertarUsuarios" method="post" class="cuerpo_form">
                 </form>
             </div>
         </div>

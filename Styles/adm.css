@@ -40,28 +40,38 @@ body {
 .barra-lateral {
     background: #252121;
     color: #fff;
-    min-width: 250px;
+    min-width: 200px;
     min-height: 100vh;
     padding: 0;
 }
 
-.barra-lateral a {
+.barra-lateral button {
     color: #fff;
 }
 
 /*ESTILOS MENU*/
 
-.barra-lateral .menu a {
-    display: block;
+.barra-lateral .menu button {
+    display: flex; /* Hace que los elementos sean flexibles */
+    align-items: center; /* Alinea los elementos verticalmente */
     padding: 20px;
     font-family: Roboto, sans-serif;
     font-weight: 500;
-    border-bottom: 1px solid rgba(255, 255, 255, .1);
+    border: none; /* Elimina el borde de los botones */
+    background: none; /* Elimina el fondo de los botones */
+    color: #fff; /* Cambia el color del texto */
+    cursor: pointer; /* Cambia el cursor al pasar sobre los botones */
+    flex: 1;
+    text-align: left;
+    width: 100%;
 }
 
-.barra-lateral .menu a:hover {
+.barra-lateral .menu button span{
+    margin-left: 10px; /* Agrega un margen a la izquierda del texto */
+}
+
+.barra-lateral .menu button:hover {
     background-color: #003C5D;
-    text-decoration: none;
 }
 
 .active {
@@ -70,12 +80,13 @@ body {
 
 .barra-lateral .menu {
     border-top: 5px #fff solid;
+    /* display: flex;
+    flex-direction: row; */
 }
 
-.barra-lateral .menu a i {
+.barra-lateral .menu button i {
     margin-right: 20px;
 }
-
 
 /*MAIN*/
 
@@ -99,10 +110,10 @@ body {
     .barra-lateral {
         min-width: auto;
     }
-    .barra-lateral .menu a span {
+    .barra-lateral .menu button span {
         display: none;
     }
-    .barra-lateral .menu a i {
+    .barra-lateral .menu button i {
         margin: 0;
     }
     .barra {
@@ -116,10 +127,16 @@ body {
 @media screen and (max-width:575px) {
     .barra-lateral {
         min-height: auto;
+        min-width: 100%; /* Ajusta el ancho al 100% en pantallas pequeñas */
     }
-    .barra-lateral .menu a {
-        display: inline-block;
-        border-bottom: none;
+    .barra-lateral .menu button {
+        display: block;
+        width: 100%; /* Ajusta el ancho de los botones al 100% en pantallas pequeñas */
+        text-align: center; /* Centra el texto en los botones */
+        padding: 15px 0; /* Ajusta el relleno de los botones */
+    }
+    .barra-lateral .menu button span {
+        margin-left: 0; /* Elimina el margen izquierdo del texto */
     }
     .dropdown-menu {
         margin: 20px -78px 0px;
@@ -147,8 +164,9 @@ body {
 @media screen and (max-width:575px) {
     .barra-lateral {
         height: auto;
+        font-size: 14px; /* Reduce el tamaño del texto en pantallas muy pequeñas */
     }
-    .barra-lateral.menu a {
+    /* .barra-lateral.menu button {
         display: inline-block;
         border-bottom: none;
     }
@@ -158,7 +176,7 @@ body {
     body {
         font-size: 16px;
         overflow: visible;
-    }
+    } */
 }
 
 /* Modal */
