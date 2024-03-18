@@ -1,13 +1,52 @@
+<?php 
+    include("../../../config/conexion_consultas.php");
+
+    // Consulta para obtener el periodo con estado = 1
+    $sqlPeriodo = "SELECT * FROM periodos WHERE estado = 1";
+    $resultPeriodo = mysqli_query($conexion, $sqlPeriodo);
+    $periodo = mysqli_fetch_assoc($resultPeriodo);
+
+    // Comprobar si se encontró un periodo activo
+    if ($periodo) {
+        // Obtener el ID del periodo
+        $idPeriodo = $periodo['idperiodo'];
+?>
 <nav class="navbar navbar-light justify-content-center fs-3 mb-3">
     Pagos
 </nav>
 <div class="container mb-3">
     <div class="sub-body">
         <header class="header">
-            <h1 class="price"><span class="price__dollar">$</span>300.00<span class="price__time">/ mo</span></h1>
-            <p class="desc">Subscripción mensual</p>
+            <!-- Campo oculto para almacenar el ID del periodo -->
+            <input type="hidden" id="idPeriodo" name="idPeriodo" value="<?php echo $idPeriodo; ?>">
+            <input type="hidden" id="idServicio" name="idServicio" value="">
+            <select id="servicioSelect" onchange="actualizarPrecio()">
+                <option value="">-- Selecciona un servicio --</option>
+                <?php
+                    // Consulta para seleccionar los servicios disponibles
+                    $sqlServicios ="SELECT * FROM servicios_costos WHERE estado = 1";
+                    $result = mysqli_query($conexion, $sqlServicios);
+                    // Comprueba si hay resultados
+                    if (mysqli_num_rows($result) > 0) {   
+                        // Itera sobre los resultados y crea opciones para el select
+                        while ($row = mysqli_fetch_assoc($result)) {   
+                            echo '<option value="' . $row["costo"] . '" data-id-servicio="' . $row["id_servicio"] . '">' . $row["servicio"] . '</option>';
+                        }
+                    } else {
+                        // Si no hay servicios disponibles
+                        echo "No hay servicios disponibles";
+                    }
+                ?>
+            </select>
+            <h1 class="price"><span class="price__dollar">$</span><span id="precioServicio">0.00</span><span class="price__time">/ mo</span></h1>
         </header>
-    
+                <?php
+                    } else {
+                        // Si no se encontró un periodo activo
+                        echo "No hay periodo activo";
+                    }
+                ?>
+
         <div class="pay-select">
             <div class="pay-select__item pay-select--card is-active">
                 <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/346994/Card%20Icon.svg" alt="" />
@@ -64,6 +103,25 @@
     </div>
 </div>
 <script>
+    function actualizarPrecio() {
+        var select = document.getElementById("servicioSelect");
+        var selectedOption = select.options[select.selectedIndex];
+        var precioSeleccionado = selectedOption.value;
+        var idServicioSeleccionado = selectedOption.getAttribute("data-id-servicio");
+
+        // Verifica si la opción seleccionada es vacía
+        if (precioSeleccionado === "") {
+            // Establece el precio por defecto
+            document.getElementById("precioServicio").textContent = "0.00";
+        } else {
+            // Actualiza el precio mostrado
+            document.getElementById("precioServicio").textContent = precioSeleccionado;
+        }
+
+        // Actualiza el valor del campo oculto idServicio
+        document.getElementById("idServicio").value = idServicioSeleccionado;
+    }
+
     // Función para obtener el token de cliente desde el servidor
     function fetchClientToken() {
         $.ajax({
@@ -102,7 +160,6 @@
             authorization: clientToken
         }, function(err, client) {
             if (err) {
-                // console.error('Error al inicializar braintree.client:', err);
                 swal("Error", "Hubo un error al inicializar Braintree. Por favor, inténtalo de nuevo más tarde.", "error");
                 return;
             }
@@ -180,8 +237,17 @@
                             return;
                         }
     
-                        // Si esta fuera una integración real, aquí es donde enviarías el nonce a tu servidor.
-                        // console.log('Got a nonce: ' + payload.nonce);
+                        // Obtener el valor seleccionado del servicio
+                        var precioServicio = $('#precioServicio').text();
+                        console.log('Precio del servicio:', precioServicio);
+
+                        // Obtener el id del servicio
+                        var idServicio = $('#idServicio').val();
+                        console.log('ID del servicio:', idServicio);
+
+                        // Obtener el id del periodo
+                        var idPeriodo = $('#idPeriodo').val();
+                        console.log('ID del periodo:', idPeriodo);
     
                         // Agrega el valor del nonce al formulario
                         $('#payment_method_nonce').val(payload.nonce);
@@ -189,7 +255,11 @@
                         const pago = payload.nonce; // Obtén el nonce generado por Braintree
     
                         // Envía el formulario con AJAX
-                        const data= { payment_method_nonce: pago }; // Crea un objeto con el nonce
+                        const data= { payment_method_nonce: pago,
+                            amount: precioServicio,
+                            id_servicio: idServicio,
+                            id_periodo: idPeriodo
+                        }; // Crea un objeto con el nonce
                         $.post('./Pagos/pago_validacion.php', data)
                             .done(function(response) {
                                 // Procesamiento exitoso, haz lo que necesites aquí

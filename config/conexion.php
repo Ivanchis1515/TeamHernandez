@@ -12,7 +12,7 @@
         }
     
         //consulta preparada para buscar el usuario
-        $query = "SELECT usuario, psswd FROM usuario WHERE usuario = ?";
+        $query = "SELECT usuario, psswd, id FROM usuario WHERE usuario = ?";
         
         if ($stmt = $mysqli->prepare($query)) {
             //vincular el parametro
@@ -26,7 +26,7 @@
                 //verificar si se encontró un usuario
                 if ($stmt->num_rows > 0) {
                     //vincular el resultado a variables
-                    $stmt->bind_result($usuario_db, $hash_almacenado);
+                    $stmt->bind_result($usuario_db, $hash_almacenado, $id_usuario);
                     $stmt->fetch();
     
                     //verificar si la contraseña proporcionada coincide con el hash almacenado
@@ -35,6 +35,7 @@
                         session_start();
                         //configurar un elemento usuario dentro del arreglo global $_SESSION
                         $_SESSION['usuario'] = $usuario;
+                        $_SESSION['id_usuario'] = $id_usuario; // Almacenar id_usuario en la sesión
                         //cerrar la consulta preparada
                         $stmt->close();
                         $mysqli->close();
@@ -107,6 +108,8 @@
         session_start();
         //Si la variable $_SESSION no esta vacia (null) devuelve true
         if (isset($_SESSION["usuario"])) {
+            //si el usuario está autenticado, devuelve un código de estado 200 (OK)
+            http_response_code(200);
             return true;
         }
     
@@ -117,9 +120,13 @@
                 $decoded = Firebase\JWT\JWT::decode($token, 'clave_secreta', ['HS256']);
                 // La verificación del token fue exitosa
                 $_SESSION['usuario'] = $decoded->usuario; // Establece el usuario en la sesión
+                //si el usuario está autenticado, devuelve un código de estado 200 (OK)
+                http_response_code(200);
                 return true;
             } 
             catch (Exception $e) {
+                // Si el usuario no está autenticado, devuelve un código de estado 401 (No autorizado)
+                http_response_code(401);
                 // Si hay un error al verificar el token JWT, no se permite el acceso
                 return false;
             }

@@ -1,11 +1,13 @@
 <?php
     //inicializa la sesión
-    session_start();
+    // session_start();
     
     //cierra la sesión
-    session_unset();
+    // session_unset();
     session_destroy();
     setcookie('PHPSESSID', '', time() - 3600, '/'); //establece el tiempo de expiración en el pasado
+    //Invalida la cookie JWT
+    setcookie('jwt', '', time() - 3600, '/', '', false, true);
 
     // Evitar almacenamiento en caché en el lado del cliente
     header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
