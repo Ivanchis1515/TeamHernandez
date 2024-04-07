@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Team Hernandez | Menú</title>
     <!-- JQuery para el uso de ajax -->
     <script src="../../lib/jquery-3.6.0.min.js"></script>
@@ -33,7 +36,7 @@
                     <li>
                         <a href="#" class="px-3 text-light perfil dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle user"></i></a>
                         <div class="dropdown-menu" aria-labelledby="navbar-dropdown">
-                            <a class="dropdown-item menuperfil cerrar" id="cerrar-sesion" href="#"><i class="fas fa-sign-out-alt m-1"></i>Salir
+                            <a class="dropdown-item menuperfil cerrar" id="cerrar-sesion" href="../../config/cerrar_sesion.php"><i class="fas fa-sign-out-alt m-1"></i>Salir
                             </a>
                         </div>
                     </li>
@@ -45,9 +48,26 @@
         <div class="row">
             <div class="barra-lateral col-12 col-sm-auto">
                 <nav class="menu d-flex d-sm-block justify-content-center flex-wrap">
-                    <a href="./Usuarios/usuarios_lista.php" class="enlace" data-page="usuarios_lista.php"><i class="fas fa-users"></i><span>Usuarios</span></a>
-                    <a href="./Dietas/dietas_lista.php" class="enlace" data-page="dietas_lista.php"><i class="fa-solid fa-utensils"></i></i><span>Dietas</span></a>
-                    <a href="./Entrenamientos/entrenamientos_lista.php" class="enlace" data-page="entrenamientos_lista.php"><i class="fa-solid fa-dumbbell"></i><span>Entrenamiento</span></a>
+                    <button class="btn-enlace" data-url="./Usuarios/usuarios_lista.php">
+                        <i class="fas fa-users"></i>
+                        <span>Usuarios</span>
+                    </button>
+                    <button class="btn-enlace" data-url="./Dietas/dietas_lista.php">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Dietas</span>
+                    </button>
+                    <button class="btn-enlace" data-url="./Entrenamientos/entrenamientos_lista.php">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        <span>Entrenamiento</span>
+                    </button>
+                    <button class="btn-enlace" data-url="./Periodos/periodos_lista.php">
+                        <i class="fa-solid fa-sheet-plastic"></i>
+                        <span>Periodos</span>
+                    </button>
+                    <button class="btn-enlace" data-url="./Servicios/servicios_lista.php">
+                        <i class="fa-solid fa-cash-register"></i>
+                        <span>Servicios</span>
+                    </button>
                 </nav>
             </div>
             <main class="main col">
@@ -69,6 +89,10 @@
     <script src="./Dietas/dietas.js"></script>
     <!-- script de entrenamientos -->
     <script src="./Entrenamientos/entrenamientos.js"></script>
+    <!-- Script periodos -->
+    <script src="./Periodos/periodos.js"></script>
+    <!-- Script Servicios_costos -->
+    <script src="./Servicios/servicios.js"></script>
     <!--SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

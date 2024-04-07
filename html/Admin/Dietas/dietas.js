@@ -10,62 +10,78 @@ $(document).ready(function(){
         const formContent  = 
             '<div class="mb-3">' +
                 '<label class="form-label">Nombre Dieta:</label>' +
-                '<input type="text" class="form-control" name="nombredieta" placeholder="ejem: Baja en grasa" required>' +
+                '<input type="text" class="form-control" name="nombredieta" placeholder="Nombre de la dieta..." required />' +
             '</div>' +
             '<div class="mb-3">' +
                 '<label class="form-label">Caracteristicas:</label>' +
-                '<textarea type="text" class="form-control" name="caract" placeholder="ejem: descripcion de la dieta" required></textarea>'+
+                '<textarea type="text" class="form-control" name="caract" placeholder="Descripcion de la dieta..." required></textarea>'+
             '</div>'+
             '<div class="mb-3">' +
                 '<label class="form-label">Alimentos:</label>' +
-                '<textarea type="text" class="form-control" name="tipo_ali" placeholder="ejem: Alimentos recomendados" required></textarea>' +
+                '<textarea type="text" class="form-control" name="tipo_ali" placeholder="Alimentos recomendados..." required></textarea>' +
+            '</div>' +
+            '<div class="modal-footer">' +
+                '<button id="boton_insertarDietas" type="button" class="btn btn-success">Guardar dieta</button>' +
+                '<button id="boton_cancelarDietas" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>' +
             '</div>';
         $('.cuerpo_formDietas').html(formContent);
     });
 
     //MODAL INSERTAR DIETA
     $(document).on('click', '#boton_insertarDietas', function(){
-        var formdata = $('#insertarDieta').serialize();
-        $.ajax({
-            type:"POST",
-            url:"./Dietas/dieta_insertar.php",
-            data: formdata,
-            success:function(data){
-                if (data.includes("Error")) {
-                    //si la respuesta contiene "Error", muestra el mensaje de error
+        if ($('#insertarDieta')[0].checkValidity()) {
+            var formdata = $('#insertarDieta').serialize();
+            $.ajax({
+                type:"POST",
+                url:"./Dietas/dieta_insertar.php",
+                data: formdata,
+                success:function(data){
+                    if (data.includes("Error")) {
+                        //si la respuesta contiene "Error", muestra el mensaje de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Error!',
+                            text: data,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        //si no contiene muestra exito
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: data,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $("#miModalDieta").modal('hide');
+                            }
+                        });
+                    }
+                },
+                error: function() {
                     Swal.fire({
                         icon: 'error',
                         title: '¡Error!',
-                        text: data,
+                        text: 'Hubo un problema al insertar la dieta',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    });
-                } else {
-                    //si no contiene muestra exito
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: data,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $("#miModalDieta").modal('hide');
-                        }
                     });
                 }
-            },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: '¡Error!',
-                    text: 'Hubo un problema al insertar la dieta',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
-    }); 
+            });
+        } else{
+            //si el formulario no es válido, mostrar mensaje de error con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: '¡Error!',
+                text: 'Por favor completa todos los campos del formulario',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            })
+        }
+    });
+
     //MODAL EDITAR DIETA
     //maneja el clic en el enlace para abrir el modal de edición
     $(document).on('click', '.abrir-editar-modalDieta', function(event) {
@@ -88,15 +104,13 @@ $(document).ready(function(){
             data: { id: idDietaCifrada, iv: ivBase64 }, //enviamos el IV en base64 al servidor
             success: function(data) {
                 datos = JSON.parse(data);
-                //descifra el ID antes de cargar los datos
-                var idUsuario = descifrarID(idDietaCifrada, ivBase64);
 
                 $('#modal_tituloDietas').html('<strong>Editar Dieta</strong>');
                 const formContent =
                     '<input type="hidden" name="id" value="'+ datos.id + '">' +
                     '<div class="mb-3">' +
                         '<label class="form-label">Nombre Dieta:</label>' +
-                        '<input type="text" class="form-control" name="nombredieta" placeholder = "ejem: Baja en grasa" value="'+ datos.nombre +'" required>' +
+                        '<input type="text" class="form-control" name="nombredieta" placeholder = "ejem: Baja en grasa" value="'+ datos.nombre +'" required />' +
                     '</div>' +
                     '<div class="mb-3">' +
                         '<label class="form-label">Caracteristicas:</label>' +
@@ -105,14 +119,15 @@ $(document).ready(function(){
                     '<div class="mb-3">' +
                         '<label class="form-label">Alimentos:</label>'+
                         '<textarea type="text" class="form-control" name="tipo_ali" placeholder="ejem: Alimentos recomendados" required>'+ datos.alimentos +'</textarea>'+
-                    '</div>'
+                    '</div>' +
+                    '<div class="modal-footer">' +
+                        '<button id="boton_editarDietas" type="button" class="btn btn-success">Actualizar dieta</button>' +
+                        '<button id="boton_cancelarDietas" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>' +
+                    '</div>';
                 $('.cuerpo_formDietas').html(formContent);
-                $('#boton_insertarDietas').html('Guardar cambios');
-                //abirr el modal de edición
-                $('#miModalDieta').modal('show');
 
                 //ACTUALIZAR DIETAS
-                $('#boton_insertarDietas').off('click').on('click', function(){
+                $('#boton_editarDietas').on('click', function(){
                     var formData = $('#insertarDieta').serialize();
                     $.ajax({
                         type:"POST",
@@ -154,25 +169,12 @@ $(document).ready(function(){
                             });                        
                         }
                     });
-                }).attr('id', 'boton_actualizarDieta');
+                });
             },
             error: function() {
                 alert('Error al cargar los datos de la dieta.');
             }
         });
-    }
-    //Funcion que desencripta el id
-    function descifrarID(idCifrado, ivBase64) {
-        if (typeof CryptoJS === "undefined") {
-            console.error("CryptoJS no está definido. Asegúrate de cargar la biblioteca.");
-            return;
-        }
-        else{
-            // Descifra el ID utilizando el IV proporcionado
-            var iv = atob(ivBase64); // Decodifica el IV desde base64
-            var idDescifrado = CryptoJS.AES.decrypt(idCifrado, "ClaveDieta", { iv: iv });
-            return idDescifrado.toString(CryptoJS.enc.Utf8);
-        }
     }
 
     //ELIMINAR DIETAS
@@ -219,10 +221,6 @@ $(document).ready(function(){
                         text: data,
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $("#miModal").modal('hide');
-                        }
                     });
                 }
             },
@@ -230,7 +228,7 @@ $(document).ready(function(){
                 Swal.fire({
                     icon: 'error',
                     title: '¡Error!',
-                    text: 'Hubo un problema al eliminar el usuario.',
+                    text: 'Hubo un problema al eliminar la dieta.',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 });

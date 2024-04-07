@@ -17,17 +17,39 @@
         // Inicio de sesión exitoso
         $usuario = [
             'usuario' => $usuario,
-            'tipo_rol' => tipo($usuario) // Agrega el tipo de rol a los datos del usuario
+            'tipo_rol' => tipo($usuario) //agrega el tipo de rol a los datos del usuario
         ];
 
-        $jwt = Firebase\JWT\JWT::encode($usuario, 'clave_secreta', 'HS256'); // Generamos un token JWT
+        $jwt = Firebase\JWT\JWT::encode($usuario, 'clave_secreta', 'HS256'); //generamos un token JWT
 
-        // Devuelve el token JWT como respuesta
-        echo json_encode(['token' => $jwt, 'tipo_rol' => $tipo_rol]);
+        //redirecciona al usuario después de iniciar sesión correctamente
+        $redirect_url = '';
+        switch ($tipo_rol) {
+            case 'Administrador':
+                $redirect_url = '../html/Admin/Adm.html';
+                break;
+            case 'Coach':
+                $redirect_url = '../html/Coach/Coach.html';
+                break;
+            case 'Cliente':
+                $redirect_url = '../html/Cliente/Cliente.html';
+                break;
+            default:
+                die('Rol de usuario no válido');
+        }
+
+        //establece el token JWT como una cookie, este se termina cuando se cierre el navegador
+        setcookie('jwt', $jwt, 0, '/', '', false, true);
+
+        //redirige al usuario después de iniciar sesión
+        header('Location: ' . $redirect_url);
+        //finaliza el script para evitar envío de contenido adicional
+        exit;
     }
     else{
-        // die("Inicio de sesión fallido.");
         //si el usuario no es válido regresamos al login
         header('Location:../html/Login/Sesion.html');
+        //finaliza el script para evitar envío de contenido adicional
+        exit;
     }
 ?>

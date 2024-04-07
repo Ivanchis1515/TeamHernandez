@@ -2,7 +2,7 @@
     Usuarios
 </nav>
 <div class="container mb-3">
-    <button id="botonAbrirModal" class="btn btn-dark mb-3">Agregar usuario</button>
+    <button id="botonAbrirModalUsuarios" class="btn btn-dark mb-3">Agregar usuario</button>
     <div class="table-responsive" id="TablaUsuarios">
         <table id="tablaJson" class="table table-hover table-sm text-center">
             <thead class="table-dark">
@@ -47,7 +47,7 @@
                                 <td><?php echo $row['estado'] ?></td>
                                 <td>
                                     <!-- Ciframos los datos para junto con su llave -->
-                                    <a href="#" class="link-dark abrir-editar-modal" data-id="<?php echo $id_usuario_cifrado; ?>" data-iv="<?php echo $iv_base64; ?>">
+                                    <a href="#" class="link-dark abrir-editar-modalUsuario" data-id="<?php echo $id_usuario_cifrado; ?>" data-iv="<?php echo $iv_base64; ?>">
                                         <li class = "fa-solid fa-pen-to-square fs-5 me-3"></li>
                                     </a>
                                     <a href="#" class = "link-dark eliminar-usuario" data-id="<?php echo $id_usuario_cifrado; ?>" data-iv="<?php echo $iv_base64; ?>">

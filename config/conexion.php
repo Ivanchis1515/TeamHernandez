@@ -6,72 +6,101 @@
     function conexion($usuario, $password) {
         $mysqli = new mysqli('localhost', 'root', '', 'team_hernandez');
     
-        // Verificar la conexión
+        //verificar la conexion
         if ($mysqli->connect_error) {
             die('Error de conexión a la base de datos: ' . $mysqli->connect_error);
         }
     
-        // Consulta preparada para buscar el usuario
-        $query = "SELECT usuario, psswd FROM usuario WHERE usuario = ?";
+        //consulta preparada para buscar el usuario
+        $query = "SELECT usuario, psswd, id FROM usuario WHERE usuario = ?";
         
         if ($stmt = $mysqli->prepare($query)) {
-            // Vincular el parámetro
+            //vincular el parametro
             $stmt->bind_param('s', $usuario);
     
-            // Ejecutar la consulta
+            //ejecutar la consulta
             if ($stmt->execute()) {
-                // Obtener el resultado
+                //obten el resultado
                 $stmt->store_result();
     
-                // Verificar si se encontró un usuario
+                //verificar si se encontró un usuario
                 if ($stmt->num_rows > 0) {
-                    // Vincular el resultado a variables
-                    $stmt->bind_result($usuario_db, $hash_almacenado);
+                    //vincular el resultado a variables
+                    $stmt->bind_result($usuario_db, $hash_almacenado, $id_usuario);
                     $stmt->fetch();
     
-                    // Verificar si la contraseña proporcionada coincide con el hash almacenado
+                    //verificar si la contraseña proporcionada coincide con el hash almacenado
                     if (password_verify($password, $hash_almacenado)) {
-                        // Inicio de sesión
+                        //inicio de sesión
                         session_start();
-                        // Configurar un elemento usuario dentro del arreglo global $_SESSION
+                        //configurar un elemento usuario dentro del arreglo global $_SESSION
                         $_SESSION['usuario'] = $usuario;
-                        // Cerrar la consulta preparada
+                        $_SESSION['id_usuario'] = $id_usuario; // Almacenar id_usuario en la sesión
+                        //cerrar la consulta preparada
                         $stmt->close();
                         $mysqli->close();
-                        // Retornar verdadero
+                        //retornar verdadero
                         return true;
                     }
                 }
             }
-            // Cerrar la consulta preparada
+            //cerrar la consulta preparada
             $stmt->close();
         } else {
             die('Error en la preparación de la consulta: ' . $mysqli->error);
         }
-        // Cerrar la conexión
+        //cerrar la conexión
         $mysqli->close();
-        // Retornar falso
+        //retornar falso
         return false;
     }
     
     //funcion que verifica el tipo de usuario
     function tipo($usuario){
-         //conexion a la BD
-        $conect = mysqli_connect('localhost', 'root', '');
-        //Acceso a la base de datos apartir de la conexion
-        mysqli_select_db($conect, 'team_hernandez'); 
+        //conexion a la BD
+        $mysqli = new mysqli('localhost', 'root', '', 'team_hernandez');
+
+        // Verificar la conexión
+        if ($mysqli->connect_error) {
+            die('Error de conexión a la base de datos: ' . $mysqli->connect_error);
+        }
+
         //aqui se consulta al usuario
-        $query = "SELECT `tipo_rol` FROM `usuario` WHERE `usuario` = '$usuario'"; 
+        $query = "SELECT tipo_rol FROM usuario WHERE usuario = ?";
 
-        //ejecucion de la sentencia sql
-        $ejecutar_sql = mysqli_query($conect, $query);
-
-        // Obtener el tipo de usuario
-        $row = mysqli_fetch_assoc($ejecutar_sql);
-        $tipo = $row['tipo_rol'];
-        
-        //que retorne el usuario y su tipo
-        return $tipo; 
+        if ($stmt = $mysqli->prepare($query)) {
+            //vincular parametro
+            $stmt->bind_param('s', $usuario);
+    
+            //ejecuta la consulta
+            if ($stmt->execute()) {
+                //obten el resultado
+                $stmt->store_result();
+    
+                //verificar si se encontro un usuario
+                if ($stmt->num_rows > 0) {
+                    //vincula el resultado a variables
+                    $stmt->bind_result($tipo_rol);
+                    $stmt->fetch();
+    
+                    //cerrar la consulta preparada
+                    $stmt->close();
+                    $mysqli->close();
+    
+                    //retorna el tipo de rol
+                    return $tipo_rol;
+                }
+            }
+            //cierra la consulta preparada
+            $stmt->close();
+        } else {
+            die('Error en la preparación de la consulta: ' . $mysqli->error);
+        }
+        //cerrar la conexion a la bd
+        $mysqli->close();
+    
+        //si no se encuentra el usuario, retornar false o un valor predeterminado
+        return false;
     }
 
     function verificar_usuario() {
@@ -79,6 +108,8 @@
         session_start();
         //Si la variable $_SESSION no esta vacia (null) devuelve true
         if (isset($_SESSION["usuario"])) {
+            //si el usuario está autenticado, devuelve un código de estado 200 (OK)
+            http_response_code(200);
             return true;
         }
     
@@ -89,9 +120,13 @@
                 $decoded = Firebase\JWT\JWT::decode($token, 'clave_secreta', ['HS256']);
                 // La verificación del token fue exitosa
                 $_SESSION['usuario'] = $decoded->usuario; // Establece el usuario en la sesión
+                //si el usuario está autenticado, devuelve un código de estado 200 (OK)
+                http_response_code(200);
                 return true;
             } 
             catch (Exception $e) {
+                // Si el usuario no está autenticado, devuelve un código de estado 401 (No autorizado)
+                http_response_code(401);
                 // Si hay un error al verificar el token JWT, no se permite el acceso
                 return false;
             }

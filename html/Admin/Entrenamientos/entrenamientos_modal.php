@@ -12,10 +12,6 @@
                 <div class="modal-body" id="cuerpo_formEntrenamiento">
                     
                 </div>
-                <div class="modal-footer">
-                    <button id="boton_insertarEntrenamiento" type="button" class="btn btn-success">Guardar</button>
-                    <button id="boton_cancelarEntrenamiento" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                </div>
             </form>
         </div>
     </div>

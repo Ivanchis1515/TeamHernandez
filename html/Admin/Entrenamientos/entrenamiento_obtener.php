@@ -26,6 +26,8 @@
         $jsonDatosPlanes = json_encode($planes);
 
         //enviar el JSON como respuesta
-        echo $jsonDatosPlanes !== '[]' ? $jsonDatosPlanes : '{"error": "No se encontraron ejercicios."}';
+        echo $jsonDatosPlanes;
+    } else {
+        echo 'No se encontraron ejercicios.';
     }
 ?>

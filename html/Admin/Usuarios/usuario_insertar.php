@@ -9,7 +9,7 @@
     $tiporol = $_POST['tipo'];
     $estado = $_POST['estado'];
 
-    // Verificando si el usuario ya existe
+    //verificando si el usuario ya existe
     $sql = "SELECT EXISTS (SELECT * FROM usuario WHERE usuario = ?)";
     $stmt = $conexion->prepare($sql);
     if($stmt){
@@ -25,12 +25,12 @@
         $stmt->close();
         //consultamos si existen usuarios iguales
         if ($existe == 1) {
-            // Esto se ejecutará si existe algún resultado igual
+            //esto se ejecutará si existe algún resultado igual
             echo "Error: El usuario ya existe, ingresa un nombre de usuario diferente";
         }
         else {
-            // Esto se ejecutará SI NO existe ninguna coincidencia
-            // El usuario no existe, ciframos la contraseña con hash
+            //esto se ejecutará SI NO existe ninguna coincidencia
+            //el usuario no existe, ciframos la contraseña con hash
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
             // Consulta preparada para la inserción

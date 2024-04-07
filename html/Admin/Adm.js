@@ -1,63 +1,62 @@
 $(document).ready(function() {
-    // Manejador de eventos para cargar una página al hacer clic en un enlace
-    $('.enlace').click(function(event) {
-        event.preventDefault(); // Evita la navegación predeterminada
-        var nuevaPaginaURL = $(this).attr('href'); // Obtiene la URL de la nueva página
-        console.log('URL de la nueva página:', nuevaPaginaURL); // Agregar esto para depuración
-        var dataPage = $(this).data('page');
-        switch (dataPage){
-            case "usuarios_lista.php":
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL); // Carga la nueva página
-                break;
-            case "dietas_lista.php":
-                // Remueve el contenido actual
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL);
-                break;
-            case "entrenamientos_lista.php":
-                // Remueve el contenido actual
-                $('#contenido').empty();
-                cargarPagina(nuevaPaginaURL);
-                break;
-        }
+    // Verifica si el usuario está autenticado al cargar la página
+    verificarAutenticacion();
+
+    //manejador de eventos para cargar una página al hacer clic en un enlace
+    $('.btn-enlace').click(function(event) {
+        event.preventDefault(); //evita la navegación predeterminada
+        var nuevaPaginaURL = $(this).data('url'); //obten la URL de la nueva página
+        console.log('URL de la nueva página:', nuevaPaginaURL); //agregar esto para depuración
+        $('#contenido').empty();
+        cargarPagina(nuevaPaginaURL); //carga la nueva pagina
     });
     
-    // Función para cargar una nueva página y reemplazar el contenido actual
+    //función para cargar una nueva página y reemplazar el contenido actual
     function cargarPagina(url) {
-        // Agrega la clase de transición antes de cargar la página
+        //agrega la clase de transición antes de cargar la página
         $('#contenido').addClass('transicion-contenido');
         $.ajax({
             url: url,
             method: 'GET',
             success: function(data) {
                 setTimeout(function() {
-                    $('#contenido').html(data); // Reemplaza el contenido actual con la nueva página
-                    // Quita la clase de transición después de cargar la página
+                    $('#contenido').html(data); //reemplaza el contenido actual con la nueva página
+                    //quita la clase de transición después de cargar la página
                     $('#contenido').removeClass('transicion-contenido');
-                }, 300); // Ajusta el tiempo según la duración de la transición CSS
+                }, 300); //ajusta el tiempo según la duración de la transición CSS
             },
             error: function() {
                 alert('Error al cargar la página');
             }
         });
     }
-    // Manejador de eventos para cerrar sesión
-    $('#cerrar-sesion').click(function(event) {
-        event.preventDefault(); // Evita la navegación predeterminada
-        // Realiza una solicitud AJAX para cerrar sesión
+
+    // Función para verificar si el usuario está autenticado
+    function verificarAutenticacion() {
         $.ajax({
-            url: '../../config/cerrar_sesion.php',
+            url: '../../config/verificar_sesion.php', // URL para verificar la autenticación
             method: 'GET',
-            success: function(data) {
-                // Maneja la respuesta del servidor
-                alert(data.message); // Muestra un mensaje
-                // Redirige al formulario de inicio de sesión
-                window.location.href = '../Login/Sesion.html';
+            success: function(response, status, xhr) {
+                if (xhr.status === 200) {
+                    // Si el usuario está autenticado (código de estado 200), puedes realizar otras acciones aquí
+                    console.log('El usuario está autenticado');
+                    console.log(xhr.status);
+                } else if (xhr.status === 401) {
+                    // Si el usuario no está autenticado (código de estado 401), redirige al formulario de inicio de sesión
+                    window.location.href = '../html/Login/Sesion.html';
+                }
             },
-            error: function() {
-                alert('Error al cerrar sesión');
+            error: function(xhr, status, error) {
+                // Manejo de errores
+                console.error(xhr.responseText);
             }
         });
-    });
+    }
+
+    // Forzar recarga de página al retroceder desde la caché del navegador
+    window.onpageshow = function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    };
 });

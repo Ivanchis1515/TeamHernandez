@@ -1,8 +1,8 @@
 $(document).ready(function() {
     ///MODAL INSERTAR USUARIOS
-    $(document).on('click', '#botonAbrirModal', function() {
+    $(document).on('click', '#botonAbrirModalUsuarios', function() {
         //configuración del modal antes de abrirlo
-        $("#miModal").modal({
+        $("#miModalUsuarios").modal({
             show: true,
             backdrop: false, //desactiva el fondo semitransparente
             keyboard: false
@@ -11,82 +11,106 @@ $(document).ready(function() {
         const formContent  = 
             '<div class="mb-3">' +
                 '<label class="form-label">Nombre completo:</label>' +
-                '<input type="text" class="form-control" id=nombre name="nombrecom" placeholder="Nombre completo sin números" required="required">' +
+                '<input type="text" class="form-control" id=nombre name="nombrecom" placeholder="Nombre completo sin números" required />' +
             '</div>' +
             '<div class="mb-3">' +
                 '<label class="form-label">Edad:</label>' +
-                '<input type="number" class="form-control" id="edad" name="edad" placeholder="Edad" min="0" max="100" required="required">' +
+                '<input type="number" class="form-control" id="edad" name="edad" placeholder="Edad" min="0" max="100" required />' +
             '</div>' +
             '<div class="row mb-3">' +
                 '<div class="col mb-3">' +
                     '<label class="form-label">Usuario:</label>' +
-                    '<input type="text" class="form-control" id="usuario" name="usuario" placeholder="ejem: Ivanchis" required="required">' +
+                    '<input type="text" class="form-control" id="usuario" name="usuario" placeholder="ejem: Ivanchis" required />' +
                 '</div>' +
                 '<div class="col mb-3">' +
                     '<label class="form-label">Contraseña:</label>' +
-                    '<input type="text" class="form-control" id="contraseña" name="contraseña" placeholder="ejem: 12345" required="required">' +
+                    '<input type="text" class="form-control" id="contraseña" name="contraseña" placeholder="ejem: 12345" required />' +
                 '</div>' +
                 '<div class="col mb-3">' +
                     '<label class="form-label">Tipo de rol:</label>' +
-                    '<input type="text" class="form-control" id="tipo" name="tipo" placeholder="ejem: Admin/Coach/Cliente" required="required">' +
+                    '<select class="form-control" id="tipo" name="tipo" required>' +
+                        '<option value="Administrador">Administrador</option>' +
+                        '<option value="Coach">Coach</option>' +
+                        '<option value="Cliente">Cliente</option>' +
+                        '<option value="Atleta">Atleta</option>' +
+                    '</select>' +
                 '</div>' +
             '</div>' +
             '<div class="mb-3">' +
                 '<label class="form-label">Estado:</label>' +
-                '<input type="number" class="form-control" id="estado" name="estado" placeholder="1=>Activo | 0=>Inactivo" min="0" max="1" required="required">' +
+                '<select class="form-control" id="estado" name="estado" required>' +
+                    '<option value="1" selected>Activo</option>' +
+                    '<option value="0">Inactivo</option>' +
+                '</select>' +
+            '</div>' +
+            '<div class="modal-footer">' +
+                '<button id="boton_insertarUsuario" type="button" class="btn btn-success">Guardar usuario</button>' +
+                '<button id="boton_cancelar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>'+
             '</div>';
         $('.cuerpo_form').html(formContent);
     });
 
-    $(document).on('click', '#boton_insertar', function(event){
+    $(document).on('click', '#boton_insertarUsuario', function(event){
         event.preventDefault(); //detiene la accion predeterminada
-        var formdata = $('#insertar').serialize();
-        $.ajax({
-            type:"POST",
-            url:"./Usuarios/usuario_insertar.php",
-            data: formdata,
-            success:function(data){
-                if (data.includes("Error")) {
-                    //si la respuesta contiene "Error", muestra el mensaje de error
+        if ($('#insertarUsuarios')[0].checkValidity()) {
+            var formdata = $('#insertarUsuarios').serialize();
+            console.log(formdata);
+            $.ajax({
+                type:"POST",
+                url:"./Usuarios/usuario_insertar.php",
+                data: formdata,
+                success:function(data){
+                    if (data.includes("Error")) {
+                        //si la respuesta contiene "Error", muestra el mensaje de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Error!',
+                            text: data,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        //si no contiene muestra exito
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: data,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $("#miModalUsuarios").modal('hide');
+                            }
+                        });
+                    }
+                },
+                error: function() {
                     Swal.fire({
                         icon: 'error',
                         title: '¡Error!',
-                        text: data,
+                        text: 'Hubo un problema al insertar el usuario',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    });
-                } else {
-                    //si no contiene muestra exito
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: data,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $("#miModal").modal('hide');
-                        }
                     });
                 }
-            },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: '¡Error!',
-                    text: 'Hubo un problema al insertar el usuario',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            }
-        });
+            });
+        } else{
+            // Si el formulario no es válido, mostrar mensaje de error con SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: '¡Error!',
+                text: 'Por favor completa todos los campos del formulario',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            })
+        }
     });
 
     //MODAL EDITAR USUARIOS
     //maneja el clic en el enlace para abrir el modal de edición
-    $(document).on('click', '.abrir-editar-modal', function(event) {
+    $(document).on('click', '.abrir-editar-modalUsuario', function(event) {
         event.preventDefault(); //evita la acción predeterminada del enlace
-        $("#miModal").modal({
+        $("#miModalUsuarios").modal({
             show: true,
             backdrop: false, //desactiva el fondo semitransparente
             keyboard: false
@@ -104,8 +128,6 @@ $(document).ready(function() {
             data: { id: idUsuarioCifrado, iv: ivBase64 }, //enviamos el IV en base64 al servidor
             success: function(data) {
                 var datos = JSON.parse(data);
-                //descifrar el ID antes de cargar los datos
-                var idUsuario = descifrarID(idUsuarioCifrado, ivBase64);
 
                 $('#modal_titulo').html('<strong>Editar Usuario</strong>');
                 //llena el formulario de edición del modal con los datos del usuario
@@ -113,40 +135,47 @@ $(document).ready(function() {
                     '<input type="hidden" name="id" value="'+ datos.id +'">' +
                     '<div class="mb-3">' +
                         '<label class="form-label">Nombre completo:</label>' +
-                        '<input type="text" class="form-control" name="nombrecom" placeholder="Ejem: Jorge Iván Hernández..." value="'+ datos.nombrecom +'" required>' +
+                        '<input type="text" class="form-control" name="nombrecom" placeholder="Ejem: Jorge Iván Hernández..." value="'+ datos.nombrecom +'" required />' +
                     '</div>' +
                     '<div class="mb-3">' +
                         '<label class="form-label">Edad:</label>' +
-                        '<input type="number" class="form-control" name="edad" placeholder="ejem: 20" min="0" max="100" value="'+ datos.edad +'" required>' +
+                        '<input type="number" class="form-control" name="edad" placeholder="ejem: 20" min="0" max="100" value="'+ datos.edad +'" required />' +
                     '</div>' +
                     '<div class="row mb-3">' +
                         '<div class="col mb-3">' +
                             '<label class="form-label">Usuario:</label>' +
-                            '<input type="text" class="form-control" name="usuario" placeholder="ejem: Ivanchis" value="'+ datos.usuario +'" required>' +
+                            '<input type="text" class="form-control" name="usuario" placeholder="ejem: Ivanchis" value="'+ datos.usuario +'" required />' +
                         '</div>' +
                         '<div class="col mb-3">' +
                             '<label class="form-label">Contraseña:</label>' +
-                            '<input type="text" class="form-control" name="contraseña" placeholder="ejem: 12345" value="'+ datos.contraseña +'" required>' +
+                            '<input type="text" class="form-control" name="contraseña" placeholder="ejem: 12345" value="'+ datos.contraseña +'" required />' +
                         '</div>' +
                         '<div class="col mb-3">' +
                             '<label class="form-label">Tipo de rol:</label>' +
-                            '<input type="text" class="form-control" name="tipo" placeholder="ejem: Admin/Coach/Cliente" value="'+ datos.tipo +'" required>' +
+                            '<select class="form-control" id="tipo" name="tipo" required>' +
+                                '<option value="Administrador" ' + (datos.tipo === 'Administrador' ? 'selected' : '') + '>Administrador</option>' +
+                                '<option value="Coach" ' + (datos.tipo === 'Coach' ? 'selected' : '') + '>Coach</option>' +
+                                '<option value="Cliente" ' + (datos.tipo === 'Cliente' ? 'selected' : '') + '>Cliente</option>' +
+                                '<option value="Atleta" ' + (datos.tipo === 'Atleta' ? 'selected' : '') + '>Atleta</option>' +
+                            '</select>' +
                         '</div>' +
                     '</div>' +
                     '<div class="mb-3">' +
                         '<label class="form-label">Estado:</label>' +
-                        '<input type="number" class="form-control" name="estado" placeholder="1=>Activo | 0=>Inactivo" min="0" max="1" value="'+ datos.estado +'" required>' +
+                        '<select class="form-control" id="estado" name="estado" required>' +
+                            '<option value="1"' + (datos.estado === '1' ? ' selected' : '') + '>Activo</option>' +
+                            '<option value="0"' + (datos.estado === '0' ? ' selected' : '') + '>Inactivo</option>' +
+                        '</select>' +
+                    '</div>' +
+                    '<div class="modal-footer">' +
+                        '<button id="boton_editarUsuario" type="button" class="btn btn-success">Actualizar usuario</button>' +
+                        '<button id="boton_cancelar" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>'+
                     '</div>';
                 $('.cuerpo_form').html(formContent);
-                $('#boton_insertar').html('Guardar cambios');
-                console.log(data);
-                console.log(formContent);
-                //abrir el modal de edición
-                $('#miModal').modal('show');
 
                 //ACTUALIZAR USUARIOS
-                $('#boton_insertar').off('click').on('click', function(){
-                    var formData = $('#insertar').serialize();
+                $('#boton_editarUsuario').on('click', function(){
+                    var formData = $('#insertarUsuarios').serialize();
                     console.log(formData);
                     $.ajax({
                         type:"POST",
@@ -172,7 +201,7 @@ $(document).ready(function() {
                                     confirmButtonText: 'OK'
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        $("#miModal").modal('hide');
+                                        $("#miModalUsuarios").modal('hide');
                                     }
                                 });
                             }
@@ -188,24 +217,12 @@ $(document).ready(function() {
                             });                        
                         }
                     });
-                }).attr('id', 'boton_actualizar');
+                });
             },
             error: function() {
                 alert('Error al cargar los datos del usuario.');
             }
         });
-    }
-    function descifrarID(idCifrado, ivBase64) {
-        if (typeof CryptoJS === "undefined") {
-            console.error("CryptoJS no está definido. Asegúrate de cargar la biblioteca.");
-            return;
-        }
-        else{
-            // Descifra el ID utilizando el IV proporcionado
-            var iv = atob(ivBase64); // Decodifica el IV desde base64
-            var idDescifrado = CryptoJS.AES.decrypt(idCifrado, "ClaveSupersecreta", { iv: iv });
-            return idDescifrado.toString(CryptoJS.enc.Utf8);
-        }
     }
 
     //ELIMINAR USUARIOS
@@ -252,10 +269,6 @@ $(document).ready(function() {
                         text: data,
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $("#miModal").modal('hide');
-                        }
                     });
                 }
             },
